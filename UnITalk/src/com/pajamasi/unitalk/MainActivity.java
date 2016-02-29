@@ -7,6 +7,9 @@ import com.pajamasi.unitalk.secondTab.fragment.SecondTab_Fragment;
 import com.pajamasi.unitalk.thirdTab.fragment.ThirdTab_Fragment;
 
 import android.annotation.SuppressLint;
+import android.app.ActionBar;
+import android.app.ActionBar.Tab;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -21,9 +24,40 @@ public class MainActivity extends FragmentActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		
+		initActionBar();
 		init();
 		initFragmentList();
 		initAdapter();
+		
+	}
+	/** 액션바 지정 */
+	private void initActionBar()
+	{
+		ActionBarListener listener = new ActionBarListener();
+		
+		final ActionBar bar = getActionBar();
+		
+		// 색상 지정
+		bar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+        bar.setDisplayOptions(0, ActionBar.DISPLAY_SHOW_TITLE);
+        
+        Tab t1 = bar.newTab();
+        t1.setIcon(R.drawable.icon_person);
+        t1.setTabListener(listener);
+        
+        
+        Tab t2 = bar.newTab();
+        t2.setIcon(R.drawable.icon_chatting);
+        t2.setTabListener(listener);
+        
+        Tab t3 = bar.newTab();
+        t3.setIcon(R.drawable.icon_setup);
+        t3.setTabListener(listener);
+        
+        
+        bar.addTab(t1);
+        bar.addTab(t2);
+        bar.addTab(t3);
 	}
 	
 	/** 리소스 로딩 */
@@ -54,6 +88,8 @@ public class MainActivity extends FragmentActivity {
 		m_Pager.setAdapter(m_Adapter);
 	}
 	
+	
+	/** 전역 변수 */
 	private ViewPager 		 m_Pager;		// 프래그먼트 페이저
 	private MainPagerAdapter m_Adapter;		// 프래그먼트 관리 어댑터
 	private FragmentManager  m_FragManager; // 프래그먼트 매니저
