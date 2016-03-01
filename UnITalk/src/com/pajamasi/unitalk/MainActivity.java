@@ -24,40 +24,50 @@ public class MainActivity extends FragmentActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		
-		initActionBar();
+		
 		init();
+		initActionBar();
 		initFragmentList();
 		initAdapter();
+		addListener();
 		
 	}
+	
+	/** 리스너 추가*/
+	private void addListener()
+	{
+		m_Scroll_listener 	= new PagerScrollListener(m_Bar);
+		m_Pager.setOnPageChangeListener(m_Scroll_listener);
+	}
+	
 	/** 액션바 지정 */
 	private void initActionBar()
 	{
-		ActionBarListener listener = new ActionBarListener();
-		
-		final ActionBar bar = getActionBar();
+		m_Bar = getActionBar();
+		m_Actionbar_listener  = new ActionBarListener(m_Pager);
+	
 		
 		// 색상 지정
-		bar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-        bar.setDisplayOptions(0, ActionBar.DISPLAY_SHOW_TITLE);
+		m_Bar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+		m_Bar.setDisplayOptions(0, ActionBar.DISPLAY_SHOW_TITLE);
         
-        Tab t1 = bar.newTab();
+        Tab t1 = m_Bar.newTab();
         t1.setIcon(R.drawable.icon_person);
-        t1.setTabListener(listener);
+        t1.setTabListener(m_Actionbar_listener);
         
         
-        Tab t2 = bar.newTab();
+        Tab t2 = m_Bar.newTab();
         t2.setIcon(R.drawable.icon_chatting);
-        t2.setTabListener(listener);
+        t2.setTabListener(m_Actionbar_listener);
         
-        Tab t3 = bar.newTab();
+        Tab t3 = m_Bar.newTab();
         t3.setIcon(R.drawable.icon_setup);
-        t3.setTabListener(listener);
+        t3.setTabListener(m_Actionbar_listener);
         
         
-        bar.addTab(t1);
-        bar.addTab(t2);
-        bar.addTab(t3);
+        m_Bar.addTab(t1);
+        m_Bar.addTab(t2);
+        m_Bar.addTab(t3);
 	}
 	
 	/** 리소스 로딩 */
@@ -90,8 +100,14 @@ public class MainActivity extends FragmentActivity {
 	
 	
 	/** 전역 변수 */
+	// 사용 객체
 	private ViewPager 		 m_Pager;		// 프래그먼트 페이저
 	private MainPagerAdapter m_Adapter;		// 프래그먼트 관리 어댑터
 	private FragmentManager  m_FragManager; // 프래그먼트 매니저
 	private Vector<Fragment> m_Fragments;	// 프래그먼트 배열
+	private ActionBar 		 m_Bar;			// 액션바
+	
+	// 리스너
+	private ActionBarListener 	m_Actionbar_listener;	// 액션바 선택 리스너
+	private PagerScrollListener m_Scroll_listener;  	// 페이지 스크롤 리스너
 }
