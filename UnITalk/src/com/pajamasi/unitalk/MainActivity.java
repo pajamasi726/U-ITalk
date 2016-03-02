@@ -2,6 +2,8 @@ package com.pajamasi.unitalk;
 
 import java.util.Vector;
 
+import com.pajamasi.unitalk.DB.DBManager;
+import com.pajamasi.unitalk.DB.DBMark;
 import com.pajamasi.unitalk.firstTab.fragment.FirstTab_Fragment;
 import com.pajamasi.unitalk.secondTab.fragment.SecondTab_Fragment;
 import com.pajamasi.unitalk.thirdTab.fragment.ThirdTab_Fragment;
@@ -10,20 +12,25 @@ import android.annotation.SuppressLint;
 import android.app.ActionBar;
 import android.app.ActionBar.Tab;
 import android.graphics.drawable.ColorDrawable;
+import android.opengl.Visibility;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
+import android.view.View;
+import android.widget.RelativeLayout;
 
 @SuppressLint("NewApi")
 public class MainActivity extends FragmentActivity {
+	
+	private String reg = "APA91bGfqZOTsQalZoDg2Z6jzwxWlr51_yfJjSfZrp5GVmZ9E-PbV25Zj0SuhL9HeC3E3jJnsuD8e4LWJDTtAtEX0snv_-16Y-nt-50PsaRBRlAnyvyuFwKZAy5QIeswRw6ljkzLHGez";
+	
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		
 		
 		init();
 		initActionBar();
@@ -31,7 +38,74 @@ public class MainActivity extends FragmentActivity {
 		initAdapter();
 		addListener();
 		
+		initDBManager();
+		
+		// 가입이 되어 있지 않은 경우 레이아웃 표시
+		setJoinLayout();
+		
 	}
+	
+
+
+	public void onClick(View v)
+	{
+		switch(v.getId())
+		{
+			case R.id.btn_join :
+				
+				// 임시 가입 처리
+				if(m_DBManager.insertRegID(reg));
+					setInVisibleJoinLayout();
+			break;
+		}
+	}
+	
+	/** 회원 가입 여부 판단하기 */
+	private void setJoinLayout() {
+		boolean b = m_DBManager.select_RegID();
+		if(b)
+		{
+			// 회원 가입이 되어 있으므로, 가입창 삭제
+			setInVisibleJoinLayout();
+		}
+		else
+		{
+			// 회원 가입이 필요 하므로, 가입창 보이기
+			setVisibleJoinLayout();
+		}
+	}
+	
+	
+	/** 회원 가입 창 없애기 */
+	private void setInVisibleJoinLayout()
+	{
+		m_Bar.show();
+		m_Pager.setVisibility(View.VISIBLE);
+		m_JoinLayout.setVisibility(View.GONE);
+	}
+	
+	/** 회원 가입 창 나타내기 */
+	private void setVisibleJoinLayout()
+	{
+		m_Bar.hide();
+		m_JoinLayout.setVisibility(View.VISIBLE);
+		m_Pager.setVisibility(View.GONE);
+	}
+	
+	
+	/** 데이터 베이스 매니저 로딩 */
+	private void initDBManager()
+	{
+		m_DBManager = new DBManager(this, DBMark.DB_NAME, null, DBMark.DB_VERSION);
+		
+		// DB 매니저 열기
+		if(m_DBManager != null)
+		{
+			m_DBManager.openDB();
+		}
+	}
+	
+	
 	
 	/** 리스너 추가*/
 	private void addListener()
@@ -74,6 +148,7 @@ public class MainActivity extends FragmentActivity {
 	private void init()
 	{
 		m_Pager	=	(ViewPager)	findViewById(R.id.pager);
+		m_JoinLayout = (RelativeLayout)findViewById(R.id.joinLayout);
 		m_FragManager = this.getSupportFragmentManager();
 	}
 	
@@ -99,6 +174,17 @@ public class MainActivity extends FragmentActivity {
 	}
 	
 	
+	
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		
+		if(m_DBManager != null)
+		{
+			m_DBManager.closeDB();
+		}
+	}
+	
 	/** 전역 변수 */
 	// 사용 객체
 	private ViewPager 		 m_Pager;		// 프래그먼트 페이저
@@ -110,4 +196,10 @@ public class MainActivity extends FragmentActivity {
 	// 리스너
 	private ActionBarListener 	m_Actionbar_listener;	// 액션바 선택 리스너
 	private PagerScrollListener m_Scroll_listener;  	// 페이지 스크롤 리스너
+	
+	// 회원가입 레이아웃
+	private RelativeLayout 	m_JoinLayout;
+	
+	// DB 매니저
+	private DBManager 		m_DBManager;
 }
