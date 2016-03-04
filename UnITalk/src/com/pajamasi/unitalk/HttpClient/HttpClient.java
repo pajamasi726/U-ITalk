@@ -11,29 +11,45 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
+import org.apache.http.util.EntityUtils;
 
 import com.pajamasi.unitalk.Util.Const;
 
 public class HttpClient {
 	
-	public void sendMessageToServer(String url, ArrayList<NameValuePair> nameValuePairs) {
-		DefaultHttpClient http = new DefaultHttpClient();
-		try {
-			HttpParams params = http.getParams();
-			HttpConnectionParams.setConnectionTimeout(params, 5000);
-			HttpConnectionParams.setSoTimeout(params, 5000);
+	public void sendMessageToServer(final String url, final ArrayList<NameValuePair> nameValuePairs) {
+		
+		Thread th = new Thread(new Runnable() {
+			
+			@Override
+			public void run() {
+				DefaultHttpClient http = new DefaultHttpClient();
+				try {
+					HttpParams params = http.getParams();
+					HttpConnectionParams.setConnectionTimeout(params, 5000);
+					HttpConnectionParams.setSoTimeout(params, 5000);
 
-			// post 인코딩 설정
-			HttpPost httpPost = new HttpPost(url);
-			UrlEncodedFormEntity entityRequest = new
-			UrlEncodedFormEntity(nameValuePairs, "EUC-KR");
-			httpPost.setEntity(entityRequest);
+					// post 인코딩 설정
+					HttpPost httpPost = new HttpPost(url);
+					UrlEncodedFormEntity entityRequest = new
+					UrlEncodedFormEntity(nameValuePairs, "EUC-KR");
+					httpPost.setEntity(entityRequest);
 
-			HttpResponse responsePost 	= http.execute(httpPost);
-			HttpEntity   resEntity 		= responsePost.getEntity();
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+					HttpResponse responsePost 	= http.execute(httpPost);
+					HttpEntity   resEntity 		= responsePost.getEntity();
+					
+					System.out.println(EntityUtils.toString(resEntity));
+					
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				
+			}
+		});
+		
+		th.start();
+		
+		
+		
 	}
 }

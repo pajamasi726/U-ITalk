@@ -7,8 +7,18 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class DBManager extends SQLiteOpenHelper{
 
-	private SQLiteDatabase	m_DBManager;
-	public 	MemberDB 		m_Member;
+	private static SQLiteDatabase	m_DBManager;
+	public 	MemberDB 				m_Member;
+	
+	
+	public static SQLiteDatabase get_DBManager()
+	{
+		if(m_DBManager != null)
+			return m_DBManager;
+		
+		return null;
+	}
+	
 	
 	public DBManager(Context context, String name, CursorFactory factory,int version) {
 		super(context, name, factory, version);

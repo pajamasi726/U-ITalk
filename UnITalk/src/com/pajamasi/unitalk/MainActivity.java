@@ -21,12 +21,12 @@ import android.widget.RelativeLayout;
 
 import com.pajamasi.unitalk.DB.DBManager;
 import com.pajamasi.unitalk.DB.DBMark;
-import com.pajamasi.unitalk.GCM.RegisterGCM;
 import com.pajamasi.unitalk.HttpClient.HttpClient;
 import com.pajamasi.unitalk.Util.Const;
 import com.pajamasi.unitalk.Util.ConstParam;
 import com.pajamasi.unitalk.Util.ConstProtocol;
 import com.pajamasi.unitalk.firstTab.fragment.FirstTab_Fragment;
+import com.pajamasi.unitalk.gcm.GCMRegister;
 import com.pajamasi.unitalk.secondTab.fragment.SecondTab_Fragment;
 import com.pajamasi.unitalk.thirdTab.fragment.ThirdTab_Fragment;
 
@@ -38,19 +38,21 @@ public class MainActivity extends FragmentActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		
+		setPhoneNumber();
+		initDBManager();
+		
 		init();
 		initActionBar();
 		initFragmentList();
 		initAdapter();
 		addListener();
 		
-		setPhoneNumber();
 		
-		initDBManager();
 		
 		// 가입이 되어 있지 않은 경우 레이아웃 표시
 		setJoinLayout();
 		
+		/*
 		Thread tht = new Thread(new Runnable() {
 			
 			@Override
@@ -69,6 +71,7 @@ public class MainActivity extends FragmentActivity {
 		});
 		
 		tht.start();
+		*/
 		
 	}
 	
@@ -80,7 +83,7 @@ public class MainActivity extends FragmentActivity {
 		{
 			case R.id.btn_join :
 				// 가입 하기 
-				new RegisterGCM(this).setRegister(m_DBManager);
+				new GCMRegister(this).setRegister(m_DBManager);
 				setInVisibleJoinLayout();
 			break;
 		}
@@ -92,9 +95,19 @@ public class MainActivity extends FragmentActivity {
 		String phoneNumber = "";
 		TelephonyManager systemService = (TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
 		phoneNumber = systemService.getLine1Number();    
-		phoneNumber = phoneNumber.substring(phoneNumber.length()-10,phoneNumber.length());
-		phoneNumber ="0"+phoneNumber;
-		Const.PHONE_NUM = phoneNumber;
+		
+		if(phoneNumber == null)
+		{
+			phoneNumber = "Insert USIM";
+		}
+		else
+		{
+			phoneNumber = phoneNumber.substring(phoneNumber.length()-10,phoneNumber.length());
+			phoneNumber ="0"+phoneNumber;
+			Const.PHONE_NUM = phoneNumber;
+		}
+		
+		
 	}
 	
 	

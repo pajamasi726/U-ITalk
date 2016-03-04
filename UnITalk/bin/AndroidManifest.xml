@@ -5,18 +5,19 @@
     android:versionName="1.0" >
 
     <!-- 일반 권한 -->
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
-    <uses-permission android:name="android.permission.WAKE_LOCK"/>
-    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
-    
-    
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+
     <!-- GCM 권한 -->
-    <permission android:name="org.androidtown.gcm.push.permission.C2D_MESSAGE"
+    <permission
+        android:name="org.androidtown.gcm.push.permission.C2D_MESSAGE"
         android:protectionLevel="signature" />
+
     <uses-permission android:name="org.androidtown.gcm.push.permission.C2D_MESSAGE" />
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
-    
+
     <uses-sdk
         android:minSdkVersion="11"
         android:targetSdkVersion="21" />
@@ -35,6 +36,17 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!-- GCM 관련 브로드캐스트 메시지를 받을 수신자 -->
+        <receiver android:name="com.pajamasi.unitalk.gcm.GCMBroadcastReceiver"
+            android:permission="com.google.android.c2dm.permission.SEND">
+            <intent-filter>
+                <!-- 메시지 수신 메시지 지정 -->
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+                <category android:name="org.androidtown.gcm.push" />
+            </intent-filter>
+        </receiver>
+        <activity android:name=".activity.ChattingActivity"></activity>
     </application>
 
 </manifest>
