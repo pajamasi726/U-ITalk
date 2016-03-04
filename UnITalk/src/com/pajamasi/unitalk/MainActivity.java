@@ -1,32 +1,38 @@
 package com.pajamasi.unitalk;
 
+import java.util.ArrayList;
 import java.util.Vector;
 
-import com.pajamasi.unitalk.DB.DBManager;
-import com.pajamasi.unitalk.DB.DBMark;
-import com.pajamasi.unitalk.firstTab.fragment.FirstTab_Fragment;
-import com.pajamasi.unitalk.secondTab.fragment.SecondTab_Fragment;
-import com.pajamasi.unitalk.thirdTab.fragment.ThirdTab_Fragment;
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
 
 import android.annotation.SuppressLint;
 import android.app.ActionBar;
 import android.app.ActionBar.Tab;
-import android.graphics.drawable.ColorDrawable;
-import android.opengl.Visibility;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
+import android.telephony.TelephonyManager;
 import android.view.View;
 import android.widget.RelativeLayout;
+
+import com.pajamasi.unitalk.DB.DBManager;
+import com.pajamasi.unitalk.DB.DBMark;
+import com.pajamasi.unitalk.GCM.RegisterGCM;
+import com.pajamasi.unitalk.HttpClient.HttpClient;
+import com.pajamasi.unitalk.Util.Const;
+import com.pajamasi.unitalk.Util.ConstParam;
+import com.pajamasi.unitalk.Util.ConstProtocol;
+import com.pajamasi.unitalk.firstTab.fragment.FirstTab_Fragment;
+import com.pajamasi.unitalk.secondTab.fragment.SecondTab_Fragment;
+import com.pajamasi.unitalk.thirdTab.fragment.ThirdTab_Fragment;
 
 @SuppressLint("NewApi")
 public class MainActivity extends FragmentActivity {
 	
-	private String reg = "APA91bGfqZOTsQalZoDg2Z6jzwxWlr51_yfJjSfZrp5GVmZ9E-PbV25Zj0SuhL9HeC3E3jJnsuD8e4LWJDTtAtEX0snv_-16Y-nt-50PsaRBRlAnyvyuFwKZAy5QIeswRw6ljkzLHGez";
-	
-
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -38,10 +44,31 @@ public class MainActivity extends FragmentActivity {
 		initAdapter();
 		addListener();
 		
+		setPhoneNumber();
+		
 		initDBManager();
 		
 		// 가입이 되어 있지 않은 경우 레이아웃 표시
 		setJoinLayout();
+		
+		Thread tht = new Thread(new Runnable() {
+			
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				ArrayList<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
+				// 프로토콜 설정 
+				nameValuePairs.add(new BasicNameValuePair(ConstProtocol.PROTOCOL, ConstProtocol.REGISTER_PHONE));
+				
+				// 서비스 등록을 위해서, 폰번호와 ID를 넘긴다.
+				nameValuePairs.add(new BasicNameValuePair(ConstParam.REGISTER_PHONENUM, Const.PHONE_NUM));
+				nameValuePairs.add(new BasicNameValuePair(ConstParam.REGISTER_ID, 		Const.RegID));
+				
+				new HttpClient().sendMessageToServer(Const.SERVER_ADDRESS, nameValuePairs);
+			}
+		});
+		
+		tht.start();
 		
 	}
 	
@@ -52,17 +79,29 @@ public class MainActivity extends FragmentActivity {
 		switch(v.getId())
 		{
 			case R.id.btn_join :
-				
-				// 임시 가입 처리
-				if(m_DBManager.insertRegID(reg));
-					setInVisibleJoinLayout();
+				// 가입 하기 
+				new RegisterGCM(this).setRegister(m_DBManager);
+				setInVisibleJoinLayout();
 			break;
 		}
 	}
 	
+	
+	private void setPhoneNumber()
+	{
+		String phoneNumber = "";
+		TelephonyManager systemService = (TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
+		phoneNumber = systemService.getLine1Number();    
+		phoneNumber = phoneNumber.substring(phoneNumber.length()-10,phoneNumber.length());
+		phoneNumber ="0"+phoneNumber;
+		Const.PHONE_NUM = phoneNumber;
+	}
+	
+	
 	/** 회원 가입 여부 판단하기 */
 	private void setJoinLayout() {
-		boolean b = m_DBManager.select_RegID();
+		boolean b = m_DBManager.m_Member.select_RegID();
+		
 		if(b)
 		{
 			// 회원 가입이 되어 있으므로, 가입창 삭제
@@ -184,6 +223,7 @@ public class MainActivity extends FragmentActivity {
 			m_DBManager.closeDB();
 		}
 	}
+	
 	
 	/** 전역 변수 */
 	// 사용 객체
