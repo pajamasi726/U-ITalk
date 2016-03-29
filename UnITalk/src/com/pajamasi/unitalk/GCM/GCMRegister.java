@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 
+import CallBackListener.CallBackListener;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
@@ -18,7 +19,7 @@ import com.pajamasi.unitalk.Util.ConstParam;
 import com.pajamasi.unitalk.Util.ConstProtocol;
 
 
-public class GCMRegister {
+public class GCMRegister implements CallBackListener{
 	
 	private Thread m_RegisterTh;
 	private Context m_Context;
@@ -70,7 +71,7 @@ public class GCMRegister {
 		nameValuePairs.add(new BasicNameValuePair(ConstParam.REGISTER_PHONENUM, Const.PHONE_NUM));
 		nameValuePairs.add(new BasicNameValuePair(ConstParam.REGISTER_ID, 		Const.RegID));
 		
-		new HttpClient().sendMessageToServer(Const.SERVER_ADDRESS, nameValuePairs);
+		new HttpClient(this).sendMessageToServer(Const.SERVER_ADDRESS, nameValuePairs);
 	}
 	
 	
@@ -82,6 +83,16 @@ public class GCMRegister {
 	                Toast.makeText(m_Context, msg, Toast.LENGTH_SHORT).show();
 	            }
 	        });
+	}
+
+	@Override
+	public void callBackMethod(String str) {
+		
+	}
+
+	@Override
+	public void callBackMethod(int i) {
+		
 	}
 
 }

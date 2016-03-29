@@ -67,6 +67,8 @@ public class GCMBroadcastReceiver extends WakefulBroadcastReceiver {
 		}
 	}
 
+	
+	// 채팅 액티비티에 메세지 보내기
 	private void broadCastToActivity(Context context, String msg) {
 		
 		Intent intent = new Intent(context, ChattingActivity.class);

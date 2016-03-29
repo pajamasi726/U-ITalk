@@ -35,7 +35,7 @@ public class ChattingActivity extends Activity{
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.chatting_ui);
+		setContentView(R.layout.ui_chatting);
 		
 		m_lv = (ListView)findViewById(R.id.lv_BroadCastChatting);
 		m_InputMsg = (EditText)findViewById(R.id.edt_inputMSG);

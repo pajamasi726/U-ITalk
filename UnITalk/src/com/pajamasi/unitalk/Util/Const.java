@@ -19,6 +19,6 @@ public class Const
     public static final String GOOGLE_API_KEY = "AIzaSyDm1B8BZ2d850B65hFYdvN1VWcqE4KRjwU";
     
     
-    public static final String SERVER_ADDRESS = "http://192.168.43.114:8080/GCM_Server/ServiceController";
+    public static final String SERVER_ADDRESS = "http://192.168.0.173:8080/GCM_Server/ServiceController";
     
 }

@@ -1,34 +1,26 @@
 package com.pajamasi.unitalk;
 
-import java.util.ArrayList;
 import java.util.Vector;
-
-import org.apache.http.NameValuePair;
-import org.apache.http.message.BasicNameValuePair;
 
 import android.annotation.SuppressLint;
 import android.app.ActionBar;
 import android.app.ActionBar.Tab;
-import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
-import android.telephony.TelephonyManager;
 import android.view.View;
 import android.widget.RelativeLayout;
 
 import com.pajamasi.unitalk.DB.DBManager;
 import com.pajamasi.unitalk.DB.DBMark;
-import com.pajamasi.unitalk.HttpClient.HttpClient;
 import com.pajamasi.unitalk.Util.Const;
-import com.pajamasi.unitalk.Util.ConstParam;
-import com.pajamasi.unitalk.Util.ConstProtocol;
-import com.pajamasi.unitalk.firstTab.fragment.FirstTab_Fragment;
+import com.pajamasi.unitalk.Util.Util;
+import com.pajamasi.unitalk.fragment.FirstTab_Fragment;
+import com.pajamasi.unitalk.fragment.SecondTab_Fragment;
+import com.pajamasi.unitalk.fragment.ThirdTab_Fragment;
 import com.pajamasi.unitalk.gcm.GCMRegister;
-import com.pajamasi.unitalk.secondTab.fragment.SecondTab_Fragment;
-import com.pajamasi.unitalk.thirdTab.fragment.ThirdTab_Fragment;
 
 @SuppressLint("NewApi")
 public class MainActivity extends FragmentActivity {
@@ -92,22 +84,8 @@ public class MainActivity extends FragmentActivity {
 	
 	private void setPhoneNumber()
 	{
-		String phoneNumber = "";
-		TelephonyManager systemService = (TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
-		phoneNumber = systemService.getLine1Number();    
-		
-		if(phoneNumber == null)
-		{
-			phoneNumber = "Insert USIM";
-		}
-		else
-		{
-			phoneNumber = phoneNumber.substring(phoneNumber.length()-10,phoneNumber.length());
-			phoneNumber ="0"+phoneNumber;
-			Const.PHONE_NUM = phoneNumber;
-		}
-		
-		
+		String phoneNumber 	= Util.getPhoneNumber(this);
+		Const.PHONE_NUM 	= phoneNumber;
 	}
 	
 	

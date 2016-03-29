@@ -40,4 +40,14 @@
         android:onClick="onClick"
         android:text="임시버튼" />
 
+    <Button
+        android:id="@+id/addFriend"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/imsi"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:onClick="onCLick"
+        android:text="친구추가" />
+
 </RelativeLayout>

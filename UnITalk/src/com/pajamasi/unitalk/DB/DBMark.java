@@ -31,8 +31,21 @@ public class DBMark {
 	public static final String SQL_INSERT_REGID  = "INSERT INTO "+TABLE_NAME_MEMBER+" ("+COLUMN_NAME_REGID+") VALUES (?);";
 			
 			
+	// 친구
+	/** 친구정보 정보 테이블 이름 */
+	public static final String TABLE_NAME_FRIEND = "T_FRIEND";
+	/** 친구정보 전화번호 컬럼 */
+	public static final String COLUMN_NAME_PHONE = "C_PHONE";
+	/** 친구정보 이름 컬럼 */
+	public static final String COLUMN_NAME_NAME  = "C_NAME";
 	
+	/** 친구 정보 테이블 생성 SQL*/
+	public static final String SQL_CREATE_FRIEND = "CREATE TABLE "+TABLE_NAME_FRIEND+" ("+COLUMN_NAME_PHONE+" "
+													+ "PRIMARY KEY, "+COLUMN_NAME_NAME+" TEXT);";
+	/** 친구 정보 선택 SQL */
+	public static final String SQL_SELECT_ALLFRIEND = "SELECT "+COLUMN_NAME_PHONE+" from "+TABLE_NAME_FRIEND;
 	
-	
+	/** 친구 정보 추가 SQL */  // 현재는 전화 번호만 등록 하게 되어 있다.
+	public static final String SQL_INSERT_FRIEND = "INSERT INTO "+TABLE_NAME_FRIEND+" ("+COLUMN_NAME_PHONE+") VALUES (?);";
 	
 }

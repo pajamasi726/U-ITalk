@@ -8,14 +8,21 @@ import org.apache.http.NameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
 import org.apache.http.util.EntityUtils;
 
-import com.pajamasi.unitalk.Util.Const;
+import CallBackListener.CallBackListener;
+import CallBackListener.OnCallBackListener;
 
 public class HttpClient {
+	
+	private OnCallBackListener m_CallBackListener;
+	
+	public HttpClient(CallBackListener listener)
+	{
+		m_CallBackListener = new OnCallBackListener(listener);
+	}
 	
 	public void sendMessageToServer(final String url, final ArrayList<NameValuePair> nameValuePairs) {
 		
@@ -37,8 +44,10 @@ public class HttpClient {
 
 					HttpResponse responsePost 	= http.execute(httpPost);
 					HttpEntity   resEntity 		= responsePost.getEntity();
+					String res = EntityUtils.toString(resEntity);
 					
-					System.out.println(EntityUtils.toString(resEntity));
+					System.out.println(res);
+					m_CallBackListener.doWork(res);
 					
 				} catch (Exception e) {
 					e.printStackTrace();

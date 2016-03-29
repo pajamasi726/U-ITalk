@@ -9,6 +9,7 @@ public class DBManager extends SQLiteOpenHelper{
 
 	private static SQLiteDatabase	m_DBManager;
 	public 	MemberDB 				m_Member;
+	public  FriendDB				m_Friend;
 	
 	
 	public static SQLiteDatabase get_DBManager()
@@ -31,6 +32,8 @@ public class DBManager extends SQLiteOpenHelper{
 		
 		// TABLE CREATE
 		db.execSQL(DBMark.SQL_CREATE_MEMBER);
+		
+		db.execSQL(DBMark.SQL_CREATE_FRIEND);
 	}
 
 	// 버전이 바꼈을때 호출
