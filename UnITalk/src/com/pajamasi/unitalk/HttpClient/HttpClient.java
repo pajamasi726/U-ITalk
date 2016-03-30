@@ -12,8 +12,8 @@ import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
 import org.apache.http.util.EntityUtils;
 
-import CallBackListener.CallBackListener;
-import CallBackListener.OnCallBackListener;
+import com.pajamasi.unitalk.CustomCallBackListener.CallBackListener;
+import com.pajamasi.unitalk.CustomCallBackListener.OnCallBackListener;
 
 public class HttpClient {
 	
@@ -57,8 +57,6 @@ public class HttpClient {
 		});
 		
 		th.start();
-		
-		
 		
 	}
 }

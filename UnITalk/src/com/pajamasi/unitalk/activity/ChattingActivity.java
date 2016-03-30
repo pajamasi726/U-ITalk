@@ -16,6 +16,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 
 import com.pajamasi.unitalk.R;
+import com.pajamasi.unitalk.CustomCallBackListener.CallBackListener;
 import com.pajamasi.unitalk.HttpClient.HttpClient;
 import com.pajamasi.unitalk.Util.Const;
 import com.pajamasi.unitalk.Util.ConstParam;
@@ -25,7 +26,7 @@ import com.pajamasi.unitalk.Util.ConstProtocol;
  * 채팅을 하는 채팅방 액티비티
  * @author Administrator
  */
-public class ChattingActivity extends Activity{
+public class ChattingActivity extends Activity implements CallBackListener{
 	
 	ListView m_lv;
 	EditText m_InputMsg;
@@ -67,7 +68,7 @@ public class ChattingActivity extends Activity{
 					// 프로토콜 설정 
 					nameValuePairs.add(new BasicNameValuePair(ConstProtocol.PROTOCOL, ConstProtocol.BROADCAST));
 					nameValuePairs.add(new BasicNameValuePair(ConstParam.MSG, URLEncoder.encode(msg, "UTF-8")));
-					new HttpClient().sendMessageToServer(Const.SERVER_ADDRESS, nameValuePairs);
+					new HttpClient(this).sendMessageToServer(Const.SERVER_ADDRESS, nameValuePairs);
 				} 
 				catch (UnsupportedEncodingException e) {
 					e.printStackTrace();
@@ -96,4 +97,18 @@ public class ChattingActivity extends Activity{
         data.add(msg);
         m_Adapter.notifyDataSetChanged();
     }
+
+    
+    
+	@Override
+	public void callBackMethod(String str) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void callBackMethod(int i) {
+		// TODO Auto-generated method stub
+		
+	}
 }
