@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import Service.BroadCastService;
 import Service.RegisterService;
 import Const.ConstProtocol;
 
@@ -39,9 +40,12 @@ public class ServiceController extends HttpServlet {
 		switch(protocol)
 		{
 			case ConstProtocol.REGISTER_PHONE :
-				new RegisterService(request);
+				new RegisterService(request , response);
 			break;
 			
+			case ConstProtocol.BROADCAST :
+				new BroadCastService(request , response);
+			break;
 			
 		}
 	}
