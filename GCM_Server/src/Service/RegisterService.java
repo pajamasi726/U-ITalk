@@ -9,8 +9,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import Const.ConstParam;
 import DTO.User;
-import Data.UserList;
 import Sender.Server;
+import USER.UserList;
 
 public class RegisterService {
 	
@@ -28,13 +28,14 @@ public class RegisterService {
 			e.printStackTrace();
 		}
 		
+		String name  = request.getParameter(ConstParam.REGISTER_NAME);
 		String phone = request.getParameter(ConstParam.REGISTER_PHONENUM);
-		String id       = request.getParameter(ConstParam.REGISTER_ID);
+		String regid       = request.getParameter(ConstParam.REGISTER_ID);
 		
-		System.out.println("등록 요청 : "+phone+"-"+id);
+		System.out.println("등록 요청 : "+name+"-"+phone+"-"+regid);
 		
 		// 사용자 생성 
-		User u = new User(phone,id);
+		User u = new User(name, phone, regid);
 		
 		// 전체 리스트에 추가
 		ArrayList<User> list = UserList.getUserList();

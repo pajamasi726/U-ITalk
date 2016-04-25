@@ -8,9 +8,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import Const.ConstProtocol;
 import Service.BroadCastService;
 import Service.RegisterService;
-import Const.ConstProtocol;
+import Service.RequestFriendListService;
 
 /**
  * Servlet implementation class ServiceController
@@ -45,6 +46,10 @@ public class ServiceController extends HttpServlet {
 			
 			case ConstProtocol.BROADCAST :
 				new BroadCastService(request , response);
+			break;
+			
+			case ConstProtocol.REQUEST_FRIEND_LIST :
+				new RequestFriendListService(request , response);
 			break;
 			
 		}

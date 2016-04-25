@@ -68,6 +68,7 @@ public class GCMRegister implements CallBackListener{
 		nameValuePairs.add(new BasicNameValuePair(ConstProtocol.PROTOCOL, ConstProtocol.REGISTER_PHONE));
 		
 		// 서비스 등록을 위해서, 폰번호와 ID를 넘긴다.
+		nameValuePairs.add(new BasicNameValuePair(ConstParam.REGISTER_NAME, 		Const.NAME));
 		nameValuePairs.add(new BasicNameValuePair(ConstParam.REGISTER_PHONENUM, Const.PHONE_NUM));
 		nameValuePairs.add(new BasicNameValuePair(ConstParam.REGISTER_ID, 		Const.RegID));
 		

@@ -46,7 +46,7 @@ public class HttpClient {
 					HttpEntity   resEntity 		= responsePost.getEntity();
 					String res = EntityUtils.toString(resEntity);
 					
-					System.out.println(res);
+					System.out.println("서버로부터의 응답 : "+res);
 					m_CallBackListener.doWork(res);
 					
 				} catch (Exception e) {

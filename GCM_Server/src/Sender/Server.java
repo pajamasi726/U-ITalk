@@ -75,7 +75,7 @@ public class Server {
          
          
         List<String> list = new ArrayList<String>();
-        ArrayList<User> user_list = Data.UserList.getUserList();
+        ArrayList<User> user_list = USER.UserList.getUserList();
         
         for(int i =0; i < user_list.size(); i++)
         {

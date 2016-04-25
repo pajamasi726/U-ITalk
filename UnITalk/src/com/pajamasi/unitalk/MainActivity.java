@@ -11,6 +11,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.RelativeLayout;
 
 import com.pajamasi.unitalk.DB.DBManager;
@@ -74,6 +75,11 @@ public class MainActivity extends FragmentActivity {
 		switch(v.getId())
 		{
 			case R.id.btn_join :
+				
+				// NAME 받아오기
+				String name = m_edtID.getText().toString();
+				Const.NAME = name;
+				
 				// 가입 하기 
 				new GCMRegister(this).setRegister(m_DBManager);
 				setInVisibleJoinLayout();
@@ -177,9 +183,10 @@ public class MainActivity extends FragmentActivity {
 	/** 리소스 로딩 */
 	private void init()
 	{
-		m_Pager	=	(ViewPager)	findViewById(R.id.pager);
-		m_JoinLayout = (RelativeLayout)findViewById(R.id.joinLayout);
+		m_Pager	      =	(ViewPager)	findViewById(R.id.pager);
+		m_JoinLayout  = (RelativeLayout)findViewById(R.id.joinLayout);
 		m_FragManager = this.getSupportFragmentManager();
+		m_edtID		  = (EditText)findViewById(R.id.edt_Id);
 	}
 	
 	/** 프래그먼트 페이지 리스트 생성 */
@@ -223,6 +230,8 @@ public class MainActivity extends FragmentActivity {
 	private FragmentManager  m_FragManager; // 프래그먼트 매니저
 	private Vector<Fragment> m_Fragments;	// 프래그먼트 배열
 	private ActionBar 		 m_Bar;			// 액션바
+	
+	private EditText		 m_edtID;
 	
 	// 리스너
 	private ActionBarListener 	m_Actionbar_listener;	// 액션바 선택 리스너

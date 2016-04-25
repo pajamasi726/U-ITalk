@@ -7,13 +7,13 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class DBManager extends SQLiteOpenHelper{
 
-	private static 	DBManager				m_DBManager;
-	private 		SQLiteDatabase			m_SQLite;
-	public 			MemberDB 				m_Member;
-	public  		FriendDB				m_Friend;
+	private static 	DBManager				m_DBManager;// 현재 클래스
+	private 		SQLiteDatabase			m_SQLite;	// SQLite
+	public 			MemberDB 				m_Member;	// GCM  
+	public  		FriendDB				m_Friend;	// 친구 목록
 	
 	
-	public static DBManager get_DBManager()
+	public static DBManager get_DBManager() // 현재 자신의 객체를 리턴 
 	{
 		if(m_DBManager != null)
 			return m_DBManager;
