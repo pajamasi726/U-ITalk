@@ -1,5 +1,6 @@
 package com.pajamasi.unitalk.gcm;
 
+import java.net.URLEncoder;
 import java.util.ArrayList;
 
 import org.apache.http.NameValuePair;
@@ -67,10 +68,14 @@ public class GCMRegister implements CallBackListener{
 		// 프로토콜 설정 
 		nameValuePairs.add(new BasicNameValuePair(ConstProtocol.PROTOCOL, ConstProtocol.REGISTER_PHONE));
 		
-		// 서비스 등록을 위해서, 폰번호와 ID를 넘긴다.
-		nameValuePairs.add(new BasicNameValuePair(ConstParam.REGISTER_NAME, 		Const.NAME));
-		nameValuePairs.add(new BasicNameValuePair(ConstParam.REGISTER_PHONENUM, Const.PHONE_NUM));
-		nameValuePairs.add(new BasicNameValuePair(ConstParam.REGISTER_ID, 		Const.RegID));
+		try
+		{
+			// 서비스 등록을 위해서, 폰번호와 ID를 넘긴다.
+			nameValuePairs.add(new BasicNameValuePair(ConstParam.REGISTER_NAME,URLEncoder.encode(Const.NAME, "UTF-8")));
+			nameValuePairs.add(new BasicNameValuePair(ConstParam.REGISTER_PHONENUM,URLEncoder.encode(Const.PHONE_NUM, "UTF-8")));
+			nameValuePairs.add(new BasicNameValuePair(ConstParam.REGISTER_ID,URLEncoder.encode(Const.RegID, "UTF-8")));
+		}catch(Exception e){e.printStackTrace();}
+		
 		
 		new HttpClient(this).sendMessageToServer(Const.SERVER_ADDRESS, nameValuePairs);
 	}

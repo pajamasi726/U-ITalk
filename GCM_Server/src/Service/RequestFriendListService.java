@@ -9,11 +9,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 
-import Const.ConstProtocol;
-import DTO.User;
+import DTO.User_ItemDTO;
 import USER.UserList;
 
 public class RequestFriendListService {
@@ -43,21 +40,21 @@ public class RequestFriendListService {
 		String json = "";
 
 		// User Data
-		ArrayList<User> list = UserList.getUserList();
-
+		ArrayList<User_ItemDTO> list = UserList.getUserList();
+/*
 		// imsi code
-		User imsi = new User("홍길동","010-8754-1703" , "abcdef");
+		User_ItemDTO imsi = new User_ItemDTO("홍길동","010-8754-1703" , "abcdef");
 		list.add(imsi);
 		
-		User imsi2 = new User("유관순","010-1234-5678" , "abcdefe");
+		User_ItemDTO imsi2 = new User_ItemDTO("유관순","010-1234-5678" , "abcdefe");
 		list.add(imsi2);
-		
+*/	
 		// JSON Array
 		JSONArray user_list = new JSONArray();
 		
 		for(int i = 0 ; i < list.size(); i ++)
 		{
-			User user = list.get(i);
+			User_ItemDTO user = list.get(i);
 			
 			JSONObject data = new JSONObject();
 			data.put("NAME", user.getName());

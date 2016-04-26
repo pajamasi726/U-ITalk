@@ -38,7 +38,7 @@ public class FirstTab_Fragment extends Fragment{
 	
 	private void init()
 	{
-		m_Adapter = new FirstTab_Adapter();
+		m_Adapter = new FirstTab_Adapter(getActivity()); // 액티비티 이동을 위해 넘겨 준다 
 		
 		m_lvFriend = (ListView) view.findViewById(R.id.lv_friend); // 리스트 뷰
 		

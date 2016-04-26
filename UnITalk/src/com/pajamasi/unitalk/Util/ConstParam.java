@@ -15,4 +15,7 @@ public class ConstParam {
 	
 	/** 친구 리스트 */
 	public static final String FRIEND_LIST			= "FRIEND_LIST";
+	
+	/** 수신자 */
+	public static final String RECEIVER				= "RECEIVER";
 }

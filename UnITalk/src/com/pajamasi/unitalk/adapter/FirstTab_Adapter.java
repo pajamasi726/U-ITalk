@@ -3,8 +3,10 @@ package com.pajamasi.unitalk.adapter;
 import java.util.ArrayList;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Handler;
 import android.os.Looper;
+import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -16,6 +18,8 @@ import android.widget.Toast;
 
 import com.pajamasi.unitalk.R;
 import com.pajamasi.unitalk.DB.DBManager;
+import com.pajamasi.unitalk.Util.ConstProtocol;
+import com.pajamasi.unitalk.activity.ChattingActivity;
 import com.pajamasi.unitalk.itemDTO.User_ItemDTO;
 import com.pajamasi.unitalk.itemHolder.AddFriend_ItemHolder;
 
@@ -25,11 +29,13 @@ public class FirstTab_Adapter extends BaseAdapter{
 	private FirstTab_Adapter 		adapter;
 	private DBManager 		  		m_DBManager; 	// DB매니저
 	private Handler 				handle;
+	private FragmentActivity 		m_Context;
 
-	public FirstTab_Adapter() {
+	public FirstTab_Adapter(FragmentActivity fragmentActivity) {
 		this.adapter 	= this;
 		list	 		= new ArrayList<User_ItemDTO>(1);
 		m_DBManager 	= DBManager.get_DBManager();
+		m_Context		= fragmentActivity;
 		
 		// 데이터 셋팅
 		list = m_DBManager.m_Friend.select_allUser();
@@ -120,7 +126,16 @@ public class FirstTab_Adapter extends BaseAdapter{
 
 			@Override
 			public void onClick(View v) {
+				
+				User_ItemDTO data = list.get(position);
 				Toast.makeText(context, list.get(position).getName(),Toast.LENGTH_SHORT).show();
+				
+				Intent intent = new Intent(m_Context, ChattingActivity.class);
+				intent.putExtra(ConstProtocol.PROTOCOL, ConstProtocol.CHAT_SETTING);
+				intent.putExtra("Name", data.getName());
+				intent.putExtra("PhoneNumber", data.getPhoneNumber());
+				
+				m_Context.startActivity(intent);
 			}
 		});
 

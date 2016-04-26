@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import Const.ConstProtocol;
 import Service.BroadCastService;
+import Service.NoteService;
 import Service.RegisterService;
 import Service.RequestFriendListService;
 
@@ -40,18 +41,21 @@ public class ServiceController extends HttpServlet {
 		
 		switch(protocol)
 		{
-			case ConstProtocol.REGISTER_PHONE :
+			case ConstProtocol.REGISTER_PHONE : // 폰등록 
 				new RegisterService(request , response);
 			break;
 			
-			case ConstProtocol.BROADCAST :
+			case ConstProtocol.BROADCAST : // 브로드캐스트
 				new BroadCastService(request , response);
 			break;
 			
-			case ConstProtocol.REQUEST_FRIEND_LIST :
+			case ConstProtocol.REQUEST_FRIEND_LIST : // 친구리스트 요청 
 				new RequestFriendListService(request , response);
 			break;
 			
+			case ConstProtocol.NOTE : // 1:1 쪽지
+				new NoteService(request, response);
+			break;
 		}
 	}
 

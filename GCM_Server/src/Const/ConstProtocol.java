@@ -4,6 +4,8 @@ public class ConstProtocol {
 	
 		// KEY
 	
+	// KEY
+	
 		/** 프로토콜 */
 		public static final String PROTOCOL		  		= "PROTOCOL";
 		
@@ -20,6 +22,13 @@ public class ConstProtocol {
 		
 		/** 구글 서비스 등록 ID */
 		public static final String REGISTER_ID	  		= "REGISTER_ID";
+		
+		
+		/** 채팅 방 셋팅 */
+		public static final String CHAT_SETTING			= "CHAT_SETTING";
+		
+		/** 단순 채팅 메세지 */
+		public static final String NOTE					= "NOTE";
 
 	
 

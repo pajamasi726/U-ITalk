@@ -10,10 +10,12 @@ import java.util.Random;
 import Const.Const;
 import Const.ConstParam;
 import Const.ConstProtocol;
-import DTO.User;
+import DTO.User_ItemDTO;
+import USER.UserList;
 
 import com.google.android.gcm.server.Message;
 import com.google.android.gcm.server.MulticastResult;
+import com.google.android.gcm.server.Result;
 import com.google.android.gcm.server.Sender;
 
 
@@ -42,18 +44,55 @@ public class Server {
         }
 
 		m_MessageKey = String.valueOf(Math.abs(random.nextInt()));
-		
+	}
+	
+	// 1명을 찾아서 보내는 메소드
+	public void sendNote(String phone, String msg)
+	{
+		 Message.Builder gcmMessageBuilder = new Message.Builder();
+         gcmMessageBuilder.collapseKey(m_MessageKey)
+         .delayWhileIdle(true)
+         .timeToLive(TTLTime);
+         
+         gcmMessageBuilder.addData(ConstProtocol.PROTOCOL, ConstProtocol.NOTE);
+         
+         try {
+ 			gcmMessageBuilder.addData(ConstParam.MSG, URLEncoder.encode(msg, "UTF-8"));
+ 		} catch (UnsupportedEncodingException e) {
+ 			e.printStackTrace();
+ 		}
+
+        Message gcmMessage = gcmMessageBuilder.build();
         
-// 		Result resultMessage = null;
-// 		try {
-// 			 resultMessage = sender.send(gcmMessage, regId, RETRY);
-// 		} catch (IOException e) {
-// 			// TODO Auto-generated catch block
-// 			e.printStackTrace();
-// 		}
-//         // 여러 단말에 메시지 전송 후 결과 확인
-//         String output = "GCM 전송 메시지 결과 => " + resultMessage.getErrorCodeName()
-//                 + "," + resultMessage.getCanonicalRegistrationId() + "," + resultMessage.getMessageId();
+        String regId = "";
+        ArrayList<User_ItemDTO> list = UserList.getUserList();
+        for(int i = 0 ; i < list.size(); i++)
+        {
+        	User_ItemDTO imsi = list.get(i);
+        	if(phone.equals(imsi.getPhoneNumber()))
+        	{
+        		regId = imsi.getRegID();
+        		System.out.println("보낼 사람 찾음 : "+imsi.getName());
+        		System.out.println("보낼 폰 번호 : "+imsi.getPhoneNumber());
+        	}
+        }
+        
+        if(regId.equals(""))
+        {
+        	System.out.println("보낼 사람 없음");
+        }
+        
+   		Result resultMessage = null;
+   		try {
+   			 resultMessage = sender.send(gcmMessage, regId, RETRY);
+   		} catch (IOException e) {
+   			e.printStackTrace();
+   		}
+           
+   		String output = "GCM 전송 메시지 결과 => " + resultMessage.getErrorCodeName()
+                   + "," + resultMessage.getCanonicalRegistrationId() + "," + resultMessage.getMessageId();
+   		
+   		System.out.println(output);
 	}
 	
 	public void BroadCast(String msg)
@@ -75,7 +114,7 @@ public class Server {
          
          
         List<String> list = new ArrayList<String>();
-        ArrayList<User> user_list = USER.UserList.getUserList();
+        ArrayList<User_ItemDTO> user_list = USER.UserList.getUserList();
         
         for(int i =0; i < user_list.size(); i++)
         {

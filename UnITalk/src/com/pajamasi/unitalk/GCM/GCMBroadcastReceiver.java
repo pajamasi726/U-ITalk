@@ -63,8 +63,25 @@ public class GCMBroadcastReceiver extends WakefulBroadcastReceiver {
 				ex.printStackTrace();
 			}
 			
-			broadCastToActivity(context, "브로드캐스트 : "+data);
+			broadCastToActivity(context,data);
 		}
+		else if(protocol.equals(ConstProtocol.NOTE))
+		{
+			System.out.println("PROTOCOL NOTE");
+			String msg = intent.getStringExtra(ConstParam.MSG); // GCM 으로부터 메세지 받아오기
+			
+			try 
+			{
+				// 메세지 디코딩
+				msg = URLDecoder.decode(msg, "UTF-8");
+			} 
+			catch(Exception ex) {
+				ex.printStackTrace();
+			}
+			
+			sendToActivity(context,msg);
+			
+		}// else if end
 	}
 
 	
@@ -84,22 +101,15 @@ public class GCMBroadcastReceiver extends WakefulBroadcastReceiver {
 	/**
 	 * 메인 액티비티로 수신된 푸시 메시지의 데이터 전달
 	 */
-	private void sendToActivity(Context context,String data) {
+	private void sendToActivity(Context context, String msg) {
 		
-		
-		Toast.makeText(context, data, Toast.LENGTH_SHORT).show();
-		System.out.println("GCM RECEIVE : "+data);
-		/*
-		Intent intent = new Intent(context, MainActivity.class);
-		intent.putExtra("from", from);
-		intent.putExtra("command", command);
-		intent.putExtra("type", type);
-		intent.putExtra("data", data);
+		Intent intent = new Intent(context, ChattingActivity.class);
+		intent.putExtra(ConstProtocol.PROTOCOL, ConstProtocol.NOTE);
+		intent.putExtra(ConstParam.MSG, msg);
 		
 		intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_SINGLE_TOP);
 
 		context.startActivity(intent);
-		*/
 	}
 
 }

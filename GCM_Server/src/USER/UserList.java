@@ -2,25 +2,25 @@ package USER;
 
 import java.util.ArrayList;
 
-import DTO.User;
+import DTO.User_ItemDTO;
 
 public class UserList 
 {
-	private static ArrayList<User> list;
+	private static ArrayList<User_ItemDTO> list;
 	
 	static
 	{
 		if(list == null)
 		{
-			list = new ArrayList<User>(1);
+			list = new ArrayList<User_ItemDTO>(1);
 		}
 	}
 	
-	public static ArrayList<User> getUserList()
+	public static ArrayList<User_ItemDTO> getUserList()
 	{
 		if(list == null)
 		{
-			list = new ArrayList<User>(1);
+			list = new ArrayList<User_ItemDTO>(1);
 		}
 		
 		return list;
