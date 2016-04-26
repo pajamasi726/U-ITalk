@@ -8,6 +8,10 @@ public class Const
 	
 	public static String PHONE_NUM = "";
 	
+	/** 상위 액티비티 정의 */
+	public static String MainActivity = "com.pajamasi.unitalk.MainActivity";
+	public static String ChattingActivity = "com.pajamasi.unitalk.activity.ChattingActivity";
+
 	/**
      * 단말 등록을 위한 필요한 ID
      */
@@ -20,6 +24,6 @@ public class Const
     public static final String GOOGLE_API_KEY = "AIzaSyDm1B8BZ2d850B65hFYdvN1VWcqE4KRjwU";
     
     
-    public static final String SERVER_ADDRESS = "http://192.168.0.51:8080/GCM_Server/ServiceController";
+    public static final String SERVER_ADDRESS = "http://192.168.0.14:8181/GCM_Server/ServiceController";
     
 }

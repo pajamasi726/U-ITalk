@@ -19,16 +19,23 @@ public class DBMark {
 	
 	// 멤버
 	/** 회원정보 정보 테이블 이름 */
-	public static final String TABLE_NAME_MEMBER = "T_MEMBER";
+	public static final String TABLE_NAME_MEMBER 			= "T_MEMBER";
+	
 	/** 회원정보 정보 컬럼 */
-	public static final String COLUMN_NAME_REGID = "C_REGID";
+	public static final String COLUMN_NAME_REGID 			= "C_REGID";
+	
+	/** 회원 아이디 */
+	public static final String COLUMN_NAME_NICKNAME    = "C_NAME";
+	
 	/** 회원정보 테이블 생성 SQL */
 	public static final String SQL_CREATE_MEMBER = "CREATE TABLE "+TABLE_NAME_MEMBER+"(_id INTEGER PRIMARY KEY AUTOINCREMENT, "
-			                                       + COLUMN_NAME_REGID+" TEXT);";
+			                                       + COLUMN_NAME_REGID+" TEXT ,"+COLUMN_NAME_NICKNAME+" TEXT"+");";
+	
 	/** 회원정보 선택 SQL */
-	public static final String SQL_SELECT_REGID  = "SELECT "+COLUMN_NAME_REGID+" from "+TABLE_NAME_MEMBER+" where _id = 1";
+	public static final String SQL_SELECT_REGID  = "SELECT "+COLUMN_NAME_REGID+","+COLUMN_NAME_NICKNAME+" from "+TABLE_NAME_MEMBER+" where _id = 1";
+	
 	/** 회원 정보 입력 */
-	public static final String SQL_INSERT_REGID  = "INSERT INTO "+TABLE_NAME_MEMBER+" ("+COLUMN_NAME_REGID+") VALUES (?);";
+	public static final String SQL_INSERT_REGID  = "INSERT INTO "+TABLE_NAME_MEMBER+" ("+COLUMN_NAME_REGID+","+COLUMN_NAME_NICKNAME+") VALUES (?,?);";
 			
 			
 	// 친구

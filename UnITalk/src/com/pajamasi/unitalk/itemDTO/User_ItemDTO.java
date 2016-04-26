@@ -1,6 +1,5 @@
 package com.pajamasi.unitalk.itemDTO;
 
-import android.media.audiofx.Equalizer;
 
 public class User_ItemDTO {
 

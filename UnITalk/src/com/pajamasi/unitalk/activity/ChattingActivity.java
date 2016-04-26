@@ -3,11 +3,16 @@ package com.pajamasi.unitalk.activity;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 
 import android.app.Activity;
+import android.app.ActivityManager;
+import android.app.ActivityManager.RunningTaskInfo;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MotionEvent;
@@ -16,6 +21,7 @@ import android.view.View.OnTouchListener;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.pajamasi.unitalk.R;
 import com.pajamasi.unitalk.CustomCallBackListener.CallBackListener;
@@ -41,6 +47,15 @@ public class ChattingActivity extends Activity implements CallBackListener{
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.ui_chatting);
+		
+		ActivityManager am = (ActivityManager)getSystemService(Context.ACTIVITY_SERVICE);
+		List<RunningTaskInfo> Info = am.getRunningTasks(1);
+		ComponentName topActivity = Info.get(0).topActivity;
+		
+		String msg = topActivity.getClassName();
+		
+		Toast.makeText(this, msg, Toast.LENGTH_LONG);
+		System.out.println("상위 액티비티 : "+msg);
 		
 		m_lv = (ListView)findViewById(R.id.lv_BroadCastChatting);
 		m_InputMsg = (EditText)findViewById(R.id.edt_inputMSG);

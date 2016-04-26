@@ -15,6 +15,7 @@ public final class R {
         public static final int icon_chatting=0x7f020001;
         public static final int icon_person=0x7f020002;
         public static final int icon_setup=0x7f020003;
+        public static final int icon_talk=0x7f020004;
     }
     public static final class id {
         public static final int FrameLayout1=0x7f060000;

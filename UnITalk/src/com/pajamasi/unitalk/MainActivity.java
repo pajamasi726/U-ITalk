@@ -2,6 +2,16 @@ package com.pajamasi.unitalk;
 
 import java.util.Vector;
 
+import com.pajamasi.unitalk.DB.DBManager;
+import com.pajamasi.unitalk.DB.DBMark;
+import com.pajamasi.unitalk.Util.Const;
+import com.pajamasi.unitalk.Util.Util;
+import com.pajamasi.unitalk.fragment.FirstTab_Fragment;
+import com.pajamasi.unitalk.fragment.SecondTab_Fragment;
+import com.pajamasi.unitalk.fragment.ThirdTab_Fragment;
+import com.pajamasi.unitalk.gcm.GCMRegister;
+import com.pajamasi.unitalk.itemDTO.User_ItemDTO;
+
 import android.annotation.SuppressLint;
 import android.app.ActionBar;
 import android.app.ActionBar.Tab;
@@ -13,15 +23,6 @@ import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
-
-import com.pajamasi.unitalk.DB.DBManager;
-import com.pajamasi.unitalk.DB.DBMark;
-import com.pajamasi.unitalk.Util.Const;
-import com.pajamasi.unitalk.Util.Util;
-import com.pajamasi.unitalk.fragment.FirstTab_Fragment;
-import com.pajamasi.unitalk.fragment.SecondTab_Fragment;
-import com.pajamasi.unitalk.fragment.ThirdTab_Fragment;
-import com.pajamasi.unitalk.gcm.GCMRegister;
 
 @SuppressLint("NewApi")
 public class MainActivity extends FragmentActivity {
@@ -41,31 +42,8 @@ public class MainActivity extends FragmentActivity {
 		addListener();
 		
 		
-		
-		// 가입이 되어 있지 않은 경우 레이아웃 표시
+		// 회원 가입 여부와, 회원 정보 가져오기
 		setJoinLayout();
-		
-		/*
-		Thread tht = new Thread(new Runnable() {
-			
-			@Override
-			public void run() {
-				// TODO Auto-generated method stub
-				ArrayList<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
-				// 프로토콜 설정 
-				nameValuePairs.add(new BasicNameValuePair(ConstProtocol.PROTOCOL, ConstProtocol.REGISTER_PHONE));
-				
-				// 서비스 등록을 위해서, 폰번호와 ID를 넘긴다.
-				nameValuePairs.add(new BasicNameValuePair(ConstParam.REGISTER_PHONENUM, Const.PHONE_NUM));
-				nameValuePairs.add(new BasicNameValuePair(ConstParam.REGISTER_ID, 		Const.RegID));
-				
-				new HttpClient().sendMessageToServer(Const.SERVER_ADDRESS, nameValuePairs);
-			}
-		});
-		
-		tht.start();
-		*/
-		
 	}
 	
 
@@ -91,16 +69,21 @@ public class MainActivity extends FragmentActivity {
 	private void setPhoneNumber()
 	{
 		String phoneNumber 	= Util.getPhoneNumber(this);
-		Const.PHONE_NUM 	= phoneNumber;
+		Const.PHONE_NUM 		= phoneNumber;
 	}
 	
 	
 	/** 회원 가입 여부 판단하기 */
 	private void setJoinLayout() {
-		boolean b = m_DBManager.m_Member.select_RegID();
 		
-		if(b)
+		User_ItemDTO data = m_DBManager.m_Member.select_MemberData();
+		
+		if(data != null)
 		{
+			Const.PHONE_NUM = data.getPhoneNumber();
+			Const.RegID = data.getRegID();
+			Const.NAME = data.getName();
+			
 			// 회원 가입이 되어 있으므로, 가입창 삭제
 			setInVisibleJoinLayout();
 		}
