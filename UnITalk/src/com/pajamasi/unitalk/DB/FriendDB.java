@@ -3,6 +3,7 @@ package com.pajamasi.unitalk.DB;
 import java.util.ArrayList;
 
 import com.pajamasi.unitalk.Util.Const;
+import com.pajamasi.unitalk.itemDTO.User_ItemDTO;
 
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -22,16 +23,19 @@ public class FriendDB {
 	}
 	
 	
-	public ArrayList<String> select_PhoneNumber()
+	public ArrayList<User_ItemDTO> select_allUser()
 	{
-		ArrayList<String> list = new ArrayList<String>(1);
+		ArrayList<User_ItemDTO> list = new ArrayList<User_ItemDTO>(1);
 		
 		Cursor c = m_DBManager.rawQuery(DBMark.SQL_SELECT_ALLFRIEND, null);
 		
 		while(c.moveToNext())
 		{
 			String friendPhoneNum = c.getString(0); // Select 문에서 번호만 선택하므로 0번재 컬럼을 선택
-			list.add(friendPhoneNum);
+			String friendName	  = c.getString(1); // 이름 가져 오기
+			
+			User_ItemDTO data = new User_ItemDTO(friendName, friendPhoneNum);
+			list.add(data);
 		}
 		
 		if(list.size() > 0)
@@ -48,12 +52,13 @@ public class FriendDB {
 		return list;
 	}
 	
-	public boolean insert_PhoneNumber(String num)
+	public boolean insert_Friend(User_ItemDTO data)
 	{
 		boolean b = false;
 		
 		SQLiteStatement statement = m_DBManager.compileStatement(DBMark.SQL_INSERT_FRIEND);
-		statement.bindString(1, num);
+		statement.bindString(1, data.getPhoneNumber());
+		statement.bindString(2, data.getName());
 	
 		long result = statement.executeInsert();
 		System.out.println("친구 추가 DB 입력 결과 : "+result);

@@ -7,7 +7,7 @@
         android:id="@+id/lv_addfriendList"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/button1"
+        android:layout_above="@+id/refresh_friend"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true" >
 

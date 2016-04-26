@@ -9,6 +9,7 @@ import android.widget.ListView;
 
 import com.pajamasi.unitalk.R;
 import com.pajamasi.unitalk.adapter.AddFriend_Adapter;
+import com.pajamasi.unitalk.adapter.FirstTab_Adapter;
 
 /**
  * 전체 친구 리스트를 나타내는 페이지
@@ -17,9 +18,8 @@ import com.pajamasi.unitalk.adapter.AddFriend_Adapter;
 public class FirstTab_Fragment extends Fragment{
 
 	private View view;
-	
 	private ListView m_lvFriend;
-	
+	private FirstTab_Adapter m_Adapter;
 	
 	
 	/**
@@ -38,14 +38,18 @@ public class FirstTab_Fragment extends Fragment{
 	
 	private void init()
 	{
+		m_Adapter = new FirstTab_Adapter();
+		
 		m_lvFriend = (ListView) view.findViewById(R.id.lv_friend); // 리스트 뷰
+		
+		m_lvFriend.setAdapter(m_Adapter);
 	}
 	
 	
-	
-	private void addData()
-	{
-		
+	@Override
+	public void onResume() {
+		m_Adapter.refresh();
+		super.onResume();
 	}
 	
 }

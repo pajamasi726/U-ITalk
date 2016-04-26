@@ -17,7 +17,6 @@ import com.pajamasi.unitalk.HttpClient.HttpClient;
 import com.pajamasi.unitalk.Util.Const;
 import com.pajamasi.unitalk.Util.ConstProtocol;
 import com.pajamasi.unitalk.adapter.AddFriend_Adapter;
-import com.pajamasi.unitalk.itemDTO.AddFriend_ItemDTO;
 import com.pajamasi.unitalk.itemDTO.User_ItemDTO;
 import com.pajamasi.unitalk.json.UNTalkJsonParser;
 
@@ -35,9 +34,6 @@ public class AddFriendActivity extends Activity implements CallBackListener{
 		init(); 		// 리소스 로딩
 		
 		setAdapter(); 	// 어뎁터 셋팅 
-		
-		
-		data_init();
 	}
 	
 	public void onClick(View v)
@@ -80,41 +76,79 @@ public class AddFriendActivity extends Activity implements CallBackListener{
 		m_ListView.setAdapter(m_Adapter);
 	}
 	
-	private void addData()
+	private void addData(User_ItemDTO data)
 	{
-		AddFriend_ItemDTO imsi = new AddFriend_ItemDTO();
-		m_Adapter.addData(imsi);
-		
+		m_Adapter.addData(data);
 		// 데이터 갱신 알리기
 		m_Adapter.notifyDataSetChanged();
 	}
 	
 	
-	private void data_init()
+	private ArrayList<User_ItemDTO> client_DataInit()
 	{
 		m_DBManager = DBManager.get_DBManager();
-		
 		System.out.println("DBManager Check : "+m_DBManager);
-		ArrayList<String> friendList = m_DBManager.m_Friend.select_PhoneNumber();
-		
+		ArrayList<User_ItemDTO> friendList = m_DBManager.m_Friend.select_allUser();
 		System.out.println("현재 추가되어 있는 친구 리스트 : "+friendList.size());
+		return friendList;
 	}
-
-	@Override
-	public void callBackMethod(String str) {
-		
-		System.out.println("친구 리스트 JSON : "+str);
-		
-		String jsonData = str;
-		
-		ArrayList<User_ItemDTO> list = (ArrayList<User_ItemDTO>)new UNTalkJsonParser().ParserController(jsonData);
+	
+	private ArrayList<User_ItemDTO> server_DataInit(String json_Data)
+	{
+		ArrayList<User_ItemDTO> list = 
+				(ArrayList<User_ItemDTO>)new UNTalkJsonParser().ParserController(json_Data);
 		
 		for(int i = 0 ; i < list.size(); i ++)
 		{
 			User_ItemDTO imsi = list.get(i);
-			System.out.println(imsi);
 		}
 		
+		return list;
+	}
+	
+	/**
+	 * @param server
+	 * @param client
+	 */
+	private void setFriendListView(ArrayList<User_ItemDTO> server, ArrayList<User_ItemDTO> client)
+	{
+		for(int i = 0 ; i < client.size(); i++)
+		{
+			User_ItemDTO c = client.get(i);
+			
+			for(int j = 0 ; j < server.size(); j++)
+			{
+				User_ItemDTO s = server.get(j);
+				
+				// 서버와 클라이언트 비교 
+				if(c.equals(s))
+				{
+					// 서로 데이터가 같으면 지운다.
+					server.remove(j);
+				}
+			}
+		}
+		
+		System.out.println("서버리스트의 숫자 : "+server.size());
+		System.out.println("클라이언트의 숫자 : "+client.size());
+		
+		// 결론적으로 server_list에는 없는 데이터만 남게된다.
+		m_Adapter.setList(server);
+		m_Adapter.refresh();
+		
+	}
+
+	@Override
+	public void callBackMethod(String str) {
+		System.out.println("친구 리스트 JSON : "+str);
+		// 서버 친구 목록 생성
+		ArrayList<User_ItemDTO> server_list = server_DataInit(str);
+		
+		// 클라이언트 데이터 목록 생성
+		ArrayList<User_ItemDTO> client_list = client_DataInit();
+		
+		// 두개를 비교해서 리스트뷰에 지정
+		setFriendListView(server_list,client_list);
 	}
 
 

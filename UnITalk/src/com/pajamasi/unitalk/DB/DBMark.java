@@ -43,9 +43,9 @@ public class DBMark {
 	public static final String SQL_CREATE_FRIEND = "CREATE TABLE "+TABLE_NAME_FRIEND+" ("+COLUMN_NAME_PHONE+" "
 													+ "PRIMARY KEY, "+COLUMN_NAME_NAME+" TEXT);";
 	/** 친구 정보 선택 SQL */
-	public static final String SQL_SELECT_ALLFRIEND = "SELECT "+COLUMN_NAME_PHONE+" from "+TABLE_NAME_FRIEND;
+	public static final String SQL_SELECT_ALLFRIEND = "SELECT * from "+TABLE_NAME_FRIEND;
 	
 	/** 친구 정보 추가 SQL */  // 현재는 전화 번호만 등록 하게 되어 있다.
-	public static final String SQL_INSERT_FRIEND = "INSERT INTO "+TABLE_NAME_FRIEND+" ("+COLUMN_NAME_PHONE+") VALUES (?);";
+	public static final String SQL_INSERT_FRIEND = "INSERT INTO "+TABLE_NAME_FRIEND+" ("+COLUMN_NAME_PHONE+","+COLUMN_NAME_NAME+") VALUES (?,?);";
 	
 }

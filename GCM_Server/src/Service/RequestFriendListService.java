@@ -49,7 +49,7 @@ public class RequestFriendListService {
 		User imsi = new User("홍길동","010-8754-1703" , "abcdef");
 		list.add(imsi);
 		
-		User imsi2 = new User("유관순","010-1234-5678" , "abcdef");
+		User imsi2 = new User("유관순","010-1234-5678" , "abcdefe");
 		list.add(imsi2);
 		
 		// JSON Array
