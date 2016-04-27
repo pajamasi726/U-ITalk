@@ -7,6 +7,8 @@ import java.util.ArrayList;
 
 import com.pajamasi.unitalk.Util.Const;
 
+import android.os.Environment;
+
 public class CustomFileWriter {
 	
 	private BufferedWriter bw;				//
@@ -28,14 +30,16 @@ public class CustomFileWriter {
 	
 	private void init()
 	{
-		String path = Const.SDCARD+Const.CHAT_PATH+"/"+this.m_path;
-		
+		String path = Environment.getExternalStorageDirectory().getPath()+Const.CHAT_PATH+"/"+this.m_path;
+		System.out.println("연결할 파일의 주소 : "+path);
 		try
 		{
 			fw = new FileWriter(path, mode);
 			bw = new BufferedWriter(fw);
 		}
-		catch(Exception e){e.printStackTrace();}
+		catch(Exception e){
+			System.out.println("파일 열기 실패 : "+e.getMessage());
+			e.printStackTrace();}
 	}
 	
 	public void write(String msg)
@@ -45,8 +49,10 @@ public class CustomFileWriter {
 			bw.write(msg+"\n");
 			bw.flush();
 		} catch (IOException e) {
+			System.out.println("파일쓰기 에러 : "+e.getMessage());
 			e.printStackTrace();
 		}
+		System.out.println("파일쓰기 완료");
 	}
 	
 	public void writeAll(ArrayList<String> list)

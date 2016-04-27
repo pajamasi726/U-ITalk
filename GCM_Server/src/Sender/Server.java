@@ -22,7 +22,7 @@ import com.google.android.gcm.server.Sender;
 public class Server {
 	
 	// 서버 사이드 전송 객체
-	Sender sender;
+	Sender send;
 	
 	private int TTLTime = 600;
 
@@ -37,7 +37,7 @@ public class Server {
 	public Server()
 	{
 		Random random = null;
-		sender = new Sender(Const.GOOGLE_API_KEY);
+		send = new Sender(Const.GOOGLE_API_KEY);
 		
 		if( random == null){
             random = new Random(System.currentTimeMillis());
@@ -47,7 +47,7 @@ public class Server {
 	}
 	
 	// 1명을 찾아서 보내는 메소드
-	public void sendNote(String phone, String msg)
+	public void sendNote(String sender, String senderphonenum, String phone, String msg)
 	{
 		 Message.Builder gcmMessageBuilder = new Message.Builder();
          gcmMessageBuilder.collapseKey(m_MessageKey)
@@ -57,7 +57,9 @@ public class Server {
          gcmMessageBuilder.addData(ConstProtocol.PROTOCOL, ConstProtocol.NOTE);
          
          try {
- 			gcmMessageBuilder.addData(ConstParam.MSG, URLEncoder.encode(msg, "UTF-8"));
+        	 gcmMessageBuilder.addData(ConstParam.SENDER, URLEncoder.encode(sender, "UTF-8"));
+        	 gcmMessageBuilder.addData(ConstParam.SENDERPHONENUM, URLEncoder.encode(senderphonenum, "UTF-8"));
+ 			 gcmMessageBuilder.addData(ConstParam.MSG, URLEncoder.encode(msg, "UTF-8"));
  		} catch (UnsupportedEncodingException e) {
  			e.printStackTrace();
  		}
@@ -84,7 +86,7 @@ public class Server {
         
    		Result resultMessage = null;
    		try {
-   			 resultMessage = sender.send(gcmMessage, regId, RETRY);
+   			 resultMessage = send.send(gcmMessage, regId, RETRY);
    		} catch (IOException e) {
    			e.printStackTrace();
    		}
@@ -124,7 +126,7 @@ public class Server {
         // 전체에게 전송
         MulticastResult resultMessage;
 		try {
-			resultMessage = sender.send(gcmMessage, list, RETRY);
+			resultMessage = send.send(gcmMessage, list, RETRY);
 			
 			  String output = "GCM 전송 메시지 결과 => " + resultMessage.getMulticastId()
 		                + "," + resultMessage.getRetryMulticastIds() + "," + resultMessage.getSuccess();

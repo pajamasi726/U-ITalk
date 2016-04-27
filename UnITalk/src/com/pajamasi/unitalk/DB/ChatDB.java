@@ -12,6 +12,7 @@ import android.database.sqlite.SQLiteStatement;
 import android.util.Log;
 
 import com.pajamasi.unitalk.Util.Const;
+import com.pajamasi.unitalk.file.CustomFileReader;
 import com.pajamasi.unitalk.itemDTO.*;
 
 public class ChatDB {
@@ -21,6 +22,40 @@ public class ChatDB {
 	public ChatDB(SQLiteDatabase manager)
 	{
 		m_DBManager = manager;
+	}
+	
+	
+	public ArrayList<String> getChatData(User_ItemDTO data)
+	{
+		ArrayList<String> list = new ArrayList<String>(1);
+		String sql = "SELECT * from "+DBMark.TABLE_NAME_CHAT
+				+ " WHERE "+DBMark.COLUMN_NAME_FPATH+" = '"+data.getName()+"'"
+				+ " AND "+DBMark.COLUMN_NAME_FPHONE+" = '"+data.getPhoneNumber()+"';";
+		
+		Cursor c = m_DBManager.rawQuery(sql, null);
+		
+		if(c.getCount() > 0) // 데이터 존재
+		{
+			while(c.moveToNext())
+			{
+				String chat_path 	= c.getString(1);
+				
+				CustomFileReader fr = new CustomFileReader(chat_path);
+				
+				while(true)
+				{
+					String str = fr.read();
+					
+					if(str == null || str.equals("") || str.equals("null"))
+						break;
+					
+					list.add(str);
+				}
+			}
+		}
+				
+		Log.i(Const.APP, "채팅 데이터 로드 완료 : "+list.size());
+		return list;
 	}
 	
 	
@@ -37,11 +72,11 @@ public class ChatDB {
 		if(c.getCount() > 0) // 데이터 존재
 		{
 			b = true;
-			Log.i(Const.APP, "이미 채팅방이 존재 합니다");
+			Log.i(Const.APP, "이미 채팅방DB가 존재 합니다");
 		}
 		else
 		{
-			
+			Log.i(Const.APP, "채팅방 DB가 존재 하지 않습니다.");
 		}
 		
 		return b;
@@ -104,6 +139,22 @@ public class ChatDB {
 		statement.close();
 		
 		return b;
+	}
+	
+	public void upDateCount()
+	{
+		
+	}
+	
+	public void upDateComment(String comment, String name, String phone)
+	{
+		SQLiteStatement statement = m_DBManager.compileStatement(DBMark.SQL_UPDATE_COMMENT);
+		statement.bindString(1, comment);
+		statement.bindString(2, name);
+		statement.bindString(3, phone);
+		
+		long result = statement.executeInsert();
+		Log.i(Const.APP, "채팅 내용 DB초 코멘트 수정 결과 : "+result);
 	}
 	
 	

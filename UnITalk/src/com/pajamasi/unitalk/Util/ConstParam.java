@@ -18,4 +18,10 @@ public class ConstParam {
 	
 	/** 수신자 */
 	public static final String RECEIVER				= "RECEIVER";
+	
+	/** 발신자 */
+	public static final String SENDER	="SENDER";
+	
+	/** 발신자 전화번호 */
+	public static final String SENDERPHONENUM = "SENDERPHONENUM";
 }

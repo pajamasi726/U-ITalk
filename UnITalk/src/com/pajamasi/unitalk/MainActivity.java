@@ -17,6 +17,7 @@ import android.annotation.SuppressLint;
 import android.app.ActionBar;
 import android.app.ActionBar.Tab;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -197,6 +198,11 @@ public class MainActivity extends FragmentActivity {
 		m_Pager.setAdapter(m_Adapter);
 	}
 	
+	@Override
+	protected void onResume() {
+		System.out.println("MainActivity onResume");
+		super.onResume();
+	}
 	
 	
 	@Override

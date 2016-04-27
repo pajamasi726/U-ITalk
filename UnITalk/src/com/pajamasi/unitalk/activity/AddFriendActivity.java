@@ -121,7 +121,7 @@ public class AddFriendActivity extends Activity implements CallBackListener{
 				User_ItemDTO s = server.get(j);
 				
 				// 서버와 클라이언트 비교 
-				if(c.equals(s))
+				if(c.equals(s) || Const.NAME.equals(s.getName())) // 자신과 같을때
 				{
 					// 서로 데이터가 같으면 지운다.
 					server.remove(j);

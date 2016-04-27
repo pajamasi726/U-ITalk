@@ -5,11 +5,13 @@ import java.util.List;
 
 import com.pajamasi.unitalk.MainActivity;
 import com.pajamasi.unitalk.R;
+import com.pajamasi.unitalk.DB.DBManager;
 import com.pajamasi.unitalk.Util.Const;
 import com.pajamasi.unitalk.Util.ConstParam;
 import com.pajamasi.unitalk.Util.ConstProtocol;
 import com.pajamasi.unitalk.Util.Util;
 import com.pajamasi.unitalk.activity.ChattingActivity;
+import com.pajamasi.unitalk.file.CustomFileWriter;
 
 import android.app.ActivityManager;
 import android.app.ActivityManager.RunningTaskInfo;
@@ -30,6 +32,8 @@ import android.support.v4.content.WakefulBroadcastReceiver;
 public class GCMBroadcastReceiver extends WakefulBroadcastReceiver {
 	
 	int COUNT = 0;
+	
+	private DBManager 		  m_DBManager; 	// DB매니저
 	
 	@Override
 	public void onReceive(Context context, Intent intent) {	//상대방이 메시지 보낼때  intent의 부가적인 정보로 사용
@@ -91,8 +95,8 @@ public class GCMBroadcastReceiver extends WakefulBroadcastReceiver {
 		String activity = getTopActivity(context);
 		
 		if(activity.equals(Const.MainActivity))
-		{
-			sendToActivity(context,msg);
+		{						
+			sendToNotification(context, intent, msg);
 		}
 		else if(activity.equals(Const.ChattingActivity))
 		{
@@ -108,20 +112,51 @@ public class GCMBroadcastReceiver extends WakefulBroadcastReceiver {
 	private void sendToNotification(Context context, Intent intent, String msg)
 	{
 		
+		String sender = intent.getStringExtra(ConstParam.SENDER);
+		// 발신자 디코딩
+		sender = Util.URLDecoding(sender);
+		
+		String senderphonenum = intent.getStringExtra(ConstParam.SENDERPHONENUM);
+		// 발신자 전화번호 디코딩
+		senderphonenum = Util.URLDecoding(senderphonenum);
+		
+		
+		System.out.println("보낸 사람 : "+sender);
+		System.out.println("보낸 사람 번호 : "+senderphonenum);
+		System.out.println("메시지 : "+msg);
+		
+		// 파일 내용에 내용 추가 하기
+		CustomFileWriter fw = new CustomFileWriter(sender);
+		
+		fw.write(sender+" : "+msg);
+		
+		fw.close();
+		
+		// db에 내용 업데이트 하기
+		m_DBManager = DBManager.get_DBManager(context);
+		m_DBManager.openDB();
+		m_DBManager.m_ChatDB.upDateComment(sender+" : "+msg, sender, senderphonenum);
+		
+		
+		
 		NotificationManager nm = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
 		Resources res = context.getResources();
 
-		Intent notificationIntent = new Intent(context, MainActivity.class);
+		Intent notificationIntent = new Intent(context, ChattingActivity.class);
 		notificationIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_SINGLE_TOP);
 
+		
+		notificationIntent.putExtra(ConstProtocol.PROTOCOL, ConstProtocol.CHAT_SETTING);
+		notificationIntent.putExtra("Name", sender);
+		notificationIntent.putExtra("PhoneNumber", senderphonenum);
 		
 		PendingIntent contentIntent = PendingIntent.getActivity(context, 0, notificationIntent,
 				PendingIntent.FLAG_UPDATE_CURRENT);
 
 		NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
 
-		.setContentTitle("도착했썹")
+		.setContentTitle(sender)
 
 		.setContentText(msg)
 
@@ -143,7 +178,8 @@ public class GCMBroadcastReceiver extends WakefulBroadcastReceiver {
 
 		Notification n = builder.build();
 
-		nm.notify(COUNT, n);
+		// 보낸 사람의 전화번호로 고유값을 매긴다
+		nm.notify(1234, n);
 	}
 	
 	// 채팅 액티비티에 메세지 보내기
