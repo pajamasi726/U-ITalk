@@ -54,17 +54,6 @@ public class FirstTab_Fragment extends Fragment{
 	
 	@Override
 	public void onResume() {
-		
-		ActivityManager am = (ActivityManager)getActivity().getSystemService(Context.ACTIVITY_SERVICE);
-		List<RunningTaskInfo> Info = am.getRunningTasks(1);
-		ComponentName topActivity = Info.get(0).topActivity;
-		
-		
-		String msg = topActivity.getClassName();
-		
-		Toast.makeText(getContext(), msg, Toast.LENGTH_LONG);
-		System.out.println("상위 액티비티 : "+msg);
-		
 		m_Adapter.refresh();
 		super.onResume();
 	}

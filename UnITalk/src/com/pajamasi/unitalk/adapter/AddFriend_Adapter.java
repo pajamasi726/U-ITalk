@@ -26,10 +26,10 @@ public class AddFriend_Adapter extends BaseAdapter{
 	private DBManager 		  		m_DBManager; 	// DB¸Å´ÏÀú
 	private Handler 				handle;
 
-	public AddFriend_Adapter() {
+	public AddFriend_Adapter(Context context) {
 		this.adapter 	= this;
 		list	 		= new ArrayList<User_ItemDTO>(1);
-		m_DBManager 	= DBManager.get_DBManager();
+		m_DBManager 	= DBManager.get_DBManager(context);
 	}
 	
 	public void setList(ArrayList<User_ItemDTO> list)

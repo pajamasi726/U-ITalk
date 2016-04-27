@@ -1,5 +1,6 @@
 package com.pajamasi.unitalk.activity;
 
+import java.io.FileWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
@@ -25,10 +26,13 @@ import android.widget.Toast;
 
 import com.pajamasi.unitalk.R;
 import com.pajamasi.unitalk.CustomCallBackListener.CallBackListener;
+import com.pajamasi.unitalk.DB.DBManager;
 import com.pajamasi.unitalk.HttpClient.HttpClient;
 import com.pajamasi.unitalk.Util.Const;
 import com.pajamasi.unitalk.Util.ConstParam;
 import com.pajamasi.unitalk.Util.ConstProtocol;
+import com.pajamasi.unitalk.file.CustomFileWriter;
+import com.pajamasi.unitalk.file.FileManager;
 import com.pajamasi.unitalk.itemDTO.User_ItemDTO;
 
 /**
@@ -37,29 +41,25 @@ import com.pajamasi.unitalk.itemDTO.User_ItemDTO;
  */
 public class ChattingActivity extends Activity implements CallBackListener{
 	
-	ListView m_lv;
-	EditText m_InputMsg;
-	ArrayAdapter<String> m_Adapter;
-	ArrayList<String> data;
+	private DBManager 		  m_DBManager; 	// DB매니저
+	private ListView m_lv;
+	private EditText m_InputMsg;
+	private ArrayAdapter<String> m_Adapter;
+	private ArrayList<String> data;
 	private User_ItemDTO user;
+	private ArrayList<String> chatting;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.ui_chatting);
 		
-		ActivityManager am = (ActivityManager)getSystemService(Context.ACTIVITY_SERVICE);
-		List<RunningTaskInfo> Info = am.getRunningTasks(1);
-		ComponentName topActivity = Info.get(0).topActivity;
-		
-		String msg = topActivity.getClassName();
-		
-		Toast.makeText(this, msg, Toast.LENGTH_LONG);
-		System.out.println("상위 액티비티 : "+msg);
+		m_DBManager = DBManager.get_DBManager(this);
 		
 		m_lv = (ListView)findViewById(R.id.lv_BroadCastChatting);
 		m_InputMsg = (EditText)findViewById(R.id.edt_inputMSG);
-		
+
+		chatting = new ArrayList<String>(1);
 		data = new ArrayList<String>(1);
 		m_Adapter = new ArrayAdapter<String>(this, android.R.layout.simple_expandable_list_item_1, data);
 		
@@ -95,6 +95,9 @@ public class ChattingActivity extends Activity implements CallBackListener{
 					data.add(Const.NAME+" : "+msg);
 					m_Adapter.notifyDataSetChanged();
 					m_lv.smoothScrollByOffset(data.size());
+					
+					// 대화 로그
+					chatting.add(Const.NAME+" : "+msg);
 					
 					ArrayList<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
 					// 프로토콜 설정 
@@ -140,6 +143,9 @@ public class ChattingActivity extends Activity implements CallBackListener{
                 data.add(user.getName()+" : "+msg);
                 m_Adapter.notifyDataSetChanged();
                 m_lv.smoothScrollByOffset(data.size());
+                
+                // 대화 로그
+                chatting.add(user.getName()+" : "+msg);
     		}
     		else if(protocol.equals(ConstProtocol.CHAT_SETTING))
     		{
@@ -167,5 +173,30 @@ public class ChattingActivity extends Activity implements CallBackListener{
 	public void callBackMethod(int i) {
 		// TODO Auto-generated method stub
 		
+	}
+	
+	@Override
+	protected void onDestroy() {
+		chatWrite(); // 채팅 기록 남기기
+		super.onDestroy();
+	}
+	
+	// 채팅 기록 남기기
+	private void chatWrite()
+	{
+		// 1. 폴더 존재 확인
+		new FileManager().setRoot();
+		
+		// 2. 채팅 기록
+		CustomFileWriter chat = new CustomFileWriter(user.getName());
+		chat.writeAll(chatting);
+		chat.close();
+		
+		// 3. 채팅 db에 존재 하는지 확인
+		if(!m_DBManager.m_ChatDB.isData(user))
+		{
+			// 존재 하지 않는 경우 만들어 준다.
+			m_DBManager.m_ChatDB.insert_ChatData(user,chatting.get(chatting.size()-1));
+		}
 	}
 }

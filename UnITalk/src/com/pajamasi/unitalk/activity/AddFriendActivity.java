@@ -72,7 +72,7 @@ public class AddFriendActivity extends Activity implements CallBackListener{
 	
 	private void setAdapter()
 	{
-		m_Adapter = new AddFriend_Adapter();
+		m_Adapter = new AddFriend_Adapter(this);
 		m_ListView.setAdapter(m_Adapter);
 	}
 	
@@ -86,7 +86,7 @@ public class AddFriendActivity extends Activity implements CallBackListener{
 	
 	private ArrayList<User_ItemDTO> client_DataInit()
 	{
-		m_DBManager = DBManager.get_DBManager();
+		m_DBManager = DBManager.get_DBManager(this);
 		System.out.println("DBManager Check : "+m_DBManager);
 		ArrayList<User_ItemDTO> friendList = m_DBManager.m_Friend.select_allUser();
 		System.out.println("현재 추가되어 있는 친구 리스트 : "+friendList.size());

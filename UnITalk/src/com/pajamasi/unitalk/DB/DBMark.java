@@ -38,7 +38,7 @@ public class DBMark {
 	public static final String SQL_INSERT_REGID  = "INSERT INTO "+TABLE_NAME_MEMBER+" ("+COLUMN_NAME_REGID+","+COLUMN_NAME_NICKNAME+") VALUES (?,?);";
 			
 			
-	// 친구
+	// 친구 정보
 	/** 친구정보 정보 테이블 이름 */
 	public static final String TABLE_NAME_FRIEND = "T_FRIEND";
 	/** 친구정보 전화번호 컬럼 */
@@ -54,5 +54,52 @@ public class DBMark {
 	
 	/** 친구 정보 추가 SQL */  // 현재는 전화 번호만 등록 하게 되어 있다.
 	public static final String SQL_INSERT_FRIEND = "INSERT INTO "+TABLE_NAME_FRIEND+" ("+COLUMN_NAME_PHONE+","+COLUMN_NAME_NAME+") VALUES (?,?);";
+	
+	
+	// 대화 정보 
+	/** 대화 정보 테이블 이름 */
+	public static final String TABLE_NAME_CHAT = "T_CHAT";
+	
+	/** 대화 정보 참가 친구 이름 */
+	public static final String COLUMN_NAME_FPATH = "C_FPATH";
+	
+	/** 대화 정보 참가 친구 번호 */
+	public static final String COLUMN_NAME_FPHONE = "C_FPHONE";
+	
+	/** 대화 정보 파일 경로 */
+	public static final String COLUMN_NAME_FCOMMENT = "C_FCOMMENT";
+	
+	/** 안읽은 메세지 갯수 */
+	public static final String COLUMN_NAME_FMSGCOUNT = "C_FMSGCOUNT";
+	
+	
+	/** 대화 정보 테이블 생성 SQL*/
+	public static final String SQL_CREATE_CHAT = "CREATE TABLE "+TABLE_NAME_CHAT+" (_id INTEGER PRIMARY KEY AUTOINCREMENT, "
+												+COLUMN_NAME_FPATH+" TEXT, "
+												+COLUMN_NAME_FPHONE+" TEXT, "
+												+COLUMN_NAME_FCOMMENT+" TEXT, "
+												+COLUMN_NAME_FMSGCOUNT+" INTEGER default '0')";
+	
+	/** 대화 정보 추가 SQL */
+	public static final String SQL_INSERT_CHAT = "INSERT INTO "+TABLE_NAME_CHAT+" ("
+													+COLUMN_NAME_FPATH+","
+													+COLUMN_NAME_FPHONE+","
+													+COLUMN_NAME_FCOMMENT+","
+													+COLUMN_NAME_FMSGCOUNT+") VALUES (?,?,?,?);";
+	
+	/** 대화 안읽은 메세지 카운트 추가 */
+	public static final String SQL_UPDATE_CHATCOUNT = "UPDATE "+TABLE_NAME_CHAT+" SET "+COLUMN_NAME_FMSGCOUNT+"+1 "
+													+ "WHERE "+COLUMN_NAME_FPATH+" =? "
+													+ "AND "+COLUMN_NAME_FPHONE+" =?";
+	
+	/** 마지막 코멘트 수정 */
+	public static final String SQL_UPDATE_COMMENT = "UPDATE "+TABLE_NAME_CHAT+" SET "+COLUMN_NAME_FCOMMENT+"= ?"
+													+ "WHERE "+COLUMN_NAME_FPATH+" =? "
+													+ "AND "+COLUMN_NAME_FPHONE+" =?";
+	
+	/** 모든 대화 정보 선택 SQL */
+	public static final String SQL_SELECT_ALLCHAT = "SELECT * from "+TABLE_NAME_CHAT;
+	
+	
 	
 }

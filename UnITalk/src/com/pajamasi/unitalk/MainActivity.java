@@ -6,6 +6,7 @@ import com.pajamasi.unitalk.DB.DBManager;
 import com.pajamasi.unitalk.DB.DBMark;
 import com.pajamasi.unitalk.Util.Const;
 import com.pajamasi.unitalk.Util.Util;
+import com.pajamasi.unitalk.file.FileManager;
 import com.pajamasi.unitalk.fragment.FirstTab_Fragment;
 import com.pajamasi.unitalk.fragment.SecondTab_Fragment;
 import com.pajamasi.unitalk.fragment.ThirdTab_Fragment;
@@ -44,6 +45,9 @@ public class MainActivity extends FragmentActivity {
 		
 		// 회원 가입 여부와, 회원 정보 가져오기
 		setJoinLayout();
+		
+		// 채팅방 폴더 설정
+		new FileManager().setRoot();
 	}
 	
 

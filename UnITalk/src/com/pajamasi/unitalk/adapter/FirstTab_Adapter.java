@@ -33,9 +33,10 @@ public class FirstTab_Adapter extends BaseAdapter{
 
 	public FirstTab_Adapter(FragmentActivity fragmentActivity) {
 		this.adapter 	= this;
-		list	 		= new ArrayList<User_ItemDTO>(1);
-		m_DBManager 	= DBManager.get_DBManager();
 		m_Context		= fragmentActivity;
+		list	 		= new ArrayList<User_ItemDTO>(1);
+		m_DBManager 	= DBManager.get_DBManager(m_Context);
+		
 		
 		// 데이터 셋팅
 		list = m_DBManager.m_Friend.select_allUser();

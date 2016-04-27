@@ -8,6 +8,7 @@ import com.pajamasi.unitalk.R;
 import com.pajamasi.unitalk.Util.Const;
 import com.pajamasi.unitalk.Util.ConstParam;
 import com.pajamasi.unitalk.Util.ConstProtocol;
+import com.pajamasi.unitalk.Util.Util;
 import com.pajamasi.unitalk.activity.ChattingActivity;
 
 import android.app.ActivityManager;
@@ -28,10 +29,11 @@ import android.support.v4.content.WakefulBroadcastReceiver;
  */
 public class GCMBroadcastReceiver extends WakefulBroadcastReceiver {
 	
-	public static int COUNT = 0;
+	int COUNT = 0;
 	
 	@Override
-	public void onReceive(Context context, Intent intent) {		//상대방이 메시지 보낼때  intent의 부가적인 정보로 사용
+	public void onReceive(Context context, Intent intent) {	//상대방이 메시지 보낼때  intent의 부가적인 정보로 사용
+		
 		String action = intent.getAction();	
 		
 		if (action != null) 
@@ -41,8 +43,6 @@ public class GCMBroadcastReceiver extends WakefulBroadcastReceiver {
 				String protocol = 	intent.getStringExtra(ConstProtocol.PROTOCOL);		// 서버에서 보낸 command 라는 키의 value 값 
 				
 				cacluProtocol(context, intent, protocol);
-				// 액티비티로 전달
-				//sendToActivity(context, from, command, type, data);
 				
 			} 
 			else 
@@ -65,16 +65,11 @@ public class GCMBroadcastReceiver extends WakefulBroadcastReceiver {
 		if(protocol.equals(ConstProtocol.BROADCAST)) // 브로드 캐스트 서비스 일때
 		{
 			System.out.println("PROTOCOL BROADCAST");
-			String rawData = 	intent.getStringExtra(ConstParam.MSG); // 서버에서 보낸 msg 받아오기
 			
-			try 
-			{
-				// 메세지 디코딩
-				data = URLDecoder.decode(rawData, "UTF-8");
-			} 
-			catch(Exception ex) {
-				ex.printStackTrace();
-			}
+			String msg = 	intent.getStringExtra(ConstParam.MSG); // 서버에서 보낸 msg 받아오기
+			
+			// 메세지 디코딩
+			msg = Util.URLDecoding(msg);
 			
 			broadCastToActivity(context,data);
 		}
@@ -83,17 +78,9 @@ public class GCMBroadcastReceiver extends WakefulBroadcastReceiver {
 			System.out.println("PROTOCOL NOTE");
 			String msg = intent.getStringExtra(ConstParam.MSG); // GCM 으로부터 메세지 받아오기
 			
-			try 
-			{
-				// 메세지 디코딩
-				msg = URLDecoder.decode(msg, "UTF-8");
-			} 
-			catch(Exception ex) {
-				ex.printStackTrace();
-			}
+			msg = Util.URLDecoding(msg);
 			
 			check_TopActivity(context, intent, msg);
-			
 			
 		}// else if end
 	}
@@ -117,10 +104,9 @@ public class GCMBroadcastReceiver extends WakefulBroadcastReceiver {
 		}
 	}
 
+	// 알림 생성
 	private void sendToNotification(Context context, Intent intent, String msg)
 	{
-		
-		COUNT++;
 		
 		NotificationManager nm = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 

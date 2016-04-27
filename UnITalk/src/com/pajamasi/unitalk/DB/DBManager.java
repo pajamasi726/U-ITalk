@@ -11,14 +11,21 @@ public class DBManager extends SQLiteOpenHelper{
 	private 		SQLiteDatabase			m_SQLite;	// SQLite
 	public 			MemberDB 				m_Member;	// GCM  
 	public  		FriendDB				m_Friend;	// 친구 목록
+	public          ChatDB					m_ChatDB;   // 채팅방 목록
 	
 	
-	public static DBManager get_DBManager() // 현재 자신의 객체를 리턴 
+	public static DBManager get_DBManager(Context context) // 현재 자신의 객체를 리턴 
 	{
 		if(m_DBManager != null)
 			return m_DBManager;
 		
-		return null;
+		
+		if(m_DBManager == null) // null 값일 경우 생성 하여서 리턴
+		{
+			m_DBManager = new DBManager(context, DBMark.DB_NAME, null, DBMark.DB_VERSION);
+		}
+		
+		return m_DBManager;
 	}
 	
 	
@@ -36,6 +43,8 @@ public class DBManager extends SQLiteOpenHelper{
 		db.execSQL(DBMark.SQL_CREATE_MEMBER);
 		
 		db.execSQL(DBMark.SQL_CREATE_FRIEND);
+		
+		db.execSQL(DBMark.SQL_CREATE_CHAT);
 	}
 
 	// 버전이 바꼈을때 호출
@@ -49,6 +58,7 @@ public class DBManager extends SQLiteOpenHelper{
 		m_SQLite = getWritableDatabase();
 		m_Member = new MemberDB(m_SQLite);
 		m_Friend = new FriendDB(m_SQLite);
+		m_ChatDB = new ChatDB(m_SQLite);
 	}
 	
 	public void closeDB()
